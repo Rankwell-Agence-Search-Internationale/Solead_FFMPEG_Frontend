@@ -133,7 +133,7 @@ export default function Home() {
             <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={count}
+            value={count.toString()}
             label="Extension"
             onChange={handleCountInputChange}
             required
@@ -150,7 +150,7 @@ export default function Home() {
                 inputMode: 'numeric',
                 pattern: '[0-9]*',
               }}
-              onChange={handleNumberInputChange}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleNumberInputChange(event)}
               required
               style={{ background: 'white', width: '100%', marginBottom: '10px' }}
             />
