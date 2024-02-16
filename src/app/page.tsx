@@ -16,7 +16,7 @@ export default function Home() {
   const [ext, setExt] = React.useState('jpg');
   const [filename, setFilename] = React.useState('');
   const [numberInput, setNumberInput] = React.useState('');
-  const [count, setCount] = React.useState(100);
+  const [count, setCount] = React.useState(30);
   const [progress, setProgress] = React.useState<any>(null);
   const [error, setError] = React.useState<string | null>(null);
 
@@ -42,23 +42,23 @@ export default function Home() {
     // console.log('File Size:', selectedFile.size);
     // console.log('File Type:', selectedFile.type);
     const body: any = {
-      height: numberInput,
+      width: numberInput,
       extension: ext,
       file: selectedFile,
       count: count
     }
     if (!body?.file) {
-      setError('Please select a file.');
+      setError('Choissez le ficher.');
       setProgress(null);
       return;
     }
-    else if (!body?.height) {
-      setError('Please enter height.');
+    else if (!body?.width) {
+      setError('Saisissez Largeur.');
       setProgress(null);
       return;
     }
     else if (!body?.count) {
-      setError('Please enter count.');
+      setError('Saisissez FPS.');
       setProgress(null);
       return;
     }
@@ -69,7 +69,7 @@ export default function Home() {
     const options = JSON.parse(response || {});
     setFilename(options?.filename);
     // console.log("RESPOSNE", JSON.parse(response));
-    const paramsUrl = `?filename=${ options?.filename}&count=${body?.count}&ext=${body?.extension}&height=${body?.height}&save_path=${options?.save_path}`
+    const paramsUrl = `?filename=${ options?.filename}&fps=${body?.count}&ext=${body?.extension}&width=${body?.width}&save_path=${options?.save_path}`
       const eventSource = new EventSource('http://localhost:5000/main/progressVideo'+paramsUrl);
 
       eventSource.addEventListener('message', (event) => {
@@ -92,7 +92,7 @@ export default function Home() {
     try {
       const response = await fetch(`http://localhost:5000/main/downloadFile?filename=${filename}.zip`);
       const blob = await response.blob();
-
+      console.log(blob);
       const url = window.URL.createObjectURL(new Blob([blob]));
       const a = document.createElement('a');
       a.href = url;
@@ -101,14 +101,14 @@ export default function Home() {
       a.click();
       document.body.removeChild(a);
     } catch (error) {
-      console.error('Error downloading file:', error);
+      console.log('Error downloading file:', error);
     }
   };
     return (
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
         <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'left' }}>
-            <p style={{ textAlign: 'left' }}>File</p>
+            <p style={{ textAlign: 'left' }}>Fichier vidéo</p>
           <Input
           type="file"
           inputProps={{ accept: 'video/*' }}
@@ -129,20 +129,20 @@ export default function Home() {
             <MenuItem value={'png'}>PNG</MenuItem>
             <MenuItem value={'webp'}>WEBP</MenuItem>
             </Select>
-            <p style={{ textAlign: 'left' }}>Count</p>
-            <TextField
-              // label="Count"
-                    type="text"
-                    defaultValue="100"
-              inputProps={{
-                inputMode: 'numeric',
-                pattern: '[0-9]*',
-              }}
-              onChange={handleCountInputChange}
-              required
-              style={{ background: 'white', width: '100%', marginBottom: '10px' }}
-            />
-            <p style={{ textAlign: 'left' }}>Height</p>
+            <p style={{ textAlign: 'left' }}>FPS</p>
+            <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={count}
+            label="Extension"
+            onChange={handleCountInputChange}
+            required
+            style={{ background: 'white', marginBottom: '10px', width: '100%' }}
+          >
+            <MenuItem value={30}>30</MenuItem>
+            <MenuItem value={60}>60</MenuItem>
+            </Select>
+            <p style={{ textAlign: 'left' }}>Largeur</p>
             <TextField
               // label="Height"
               type="text"
@@ -156,11 +156,11 @@ export default function Home() {
             />
             {error && <Alert severity="error">{error}</Alert>}
             <Button variant="outlined" color="primary" onClick={handleButtonClick} className='mt-5'>
-              Upload
+            Télécharger
             </Button>
             </div>
           <div style={{ width: '50%', marginTop: '50px' , display: "flex", flexDirection: "column", alignContent:"space-around", justifyContent: "space-between"}}>
-            <h3>{progress? progress != 100 ? "Processing" : "Ready":""}</h3>
+            <h3>{progress? progress != 100 ? "Chargement" : "Prêt":""}</h3>
             <LinearProgress variant="determinate" value={progress} />
             { progress ==100 &&
               <Button
@@ -170,7 +170,7 @@ export default function Home() {
                 startIcon={<CloudDownloadIcon />}
                 onClick={handleDownload}
               >
-                Download File
+                Télécharger Zip
               </Button>
             }
               </div>
