@@ -1,7 +1,7 @@
 import axiosInstance from '@/utils/axios';
 interface ApiBody {
     file: any;
-    height: number,
+    width: number,
     extension: string,
     count: number
     // Add more fields if needed
@@ -10,7 +10,7 @@ export const uploadVideo = async (body: ApiBody) => {
     try {
         const formData = new FormData();
         formData.append('file', body?.file);
-        const apiUrl = `/main/upload_video?count=${body?.count}&ext=${body?.extension}&height=${body?.height}`;
+        const apiUrl = `/main/upload_video?count=${body?.count}&ext=${body?.extension}&height=${body?.width}`;
         console.log(apiUrl);
         const response = await axiosInstance.post(apiUrl, formData, {
           headers: {
