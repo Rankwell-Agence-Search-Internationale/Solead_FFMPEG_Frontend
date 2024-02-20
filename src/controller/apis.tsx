@@ -5,13 +5,17 @@ interface ApiBody {
     extension: string,
     count: number
     // Add more fields if needed
-  }
+}
+  /**
+   * Function to upload video
+   * @param body 
+   * @returns 
+   */
 export const uploadVideo = async (body: ApiBody) => {
     try {
         const formData = new FormData();
         formData.append('file', body?.file);
         const apiUrl = `/main/upload_video?count=${body?.count}&ext=${body?.extension}&width=${body?.width}`;
-        console.log(apiUrl);
         const response = await axiosInstance.post(apiUrl, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',

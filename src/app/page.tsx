@@ -21,29 +21,44 @@ export default function Home() {
   const [progress, setProgress] = React.useState<any>(null);
   const [loading, setLoading] = React.useState<any>(false);
   const [error, setError] = React.useState<string | null>(null);
-
+/**
+ * Handle file changes
+ * @param event 
+ */
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
     setSelectedFile(file);
   };
+  /**
+   * Handle Extension Change
+   * @param event 
+   */
   const handleChange = (event: SelectChangeEvent) => {
     setExt(event.target.value as string);
   };
+  /**
+   * Handle Width change
+   * @param event 
+   */
   const handleNumberInputChange = (event: SelectChangeEvent) => {
     const value = event.target.value;
     setNumberInput(value);
   };
+  /**
+   * Handle FPS change
+   * @param event 
+   */
   const handleCountInputChange = (event: SelectChangeEvent) => {
     const value = event.target.value;
     setCount(Number(value));
   };
+  /**
+   * Handle upload process
+   * @returns 
+   */
   const handleButtonClick = async () => {
     setLoading(true);
     setProgress(0);
-    // console.log('Selected File:', selectedFile);
-    // console.log('File Name:', selectedFile.name);
-    // console.log('File Size:', selectedFile.size);
-    // console.log('File Type:', selectedFile.type);
     const body: any = {
       width: numberInput,
       extension: ext,
@@ -94,6 +109,9 @@ export default function Home() {
         eventSource.close();
       };
   };
+  /**
+   * Handle download process
+   */
   const handleDownload = async () => {
     try {
       setLoading(true);
