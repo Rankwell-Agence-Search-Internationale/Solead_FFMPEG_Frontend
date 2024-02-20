@@ -112,7 +112,9 @@ export default function Home() {
     return (
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
         <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
+          
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'left' }}>
+          <h1 className="text-2xl mb-4 mb-20">Extraction de frames</h1>
             <p style={{ textAlign: 'left' }}>Fichier vidéo</p>
           <Input
           type="file"
