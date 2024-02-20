@@ -6,6 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Input from '@mui/material/Input';
 import TextField from '@mui/material/TextField';
+import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
 import uploadVideo from '@/controller/apis';
 import LinearProgress from '@mui/material/LinearProgress';
@@ -18,6 +19,7 @@ export default function Home() {
   const [numberInput, setNumberInput] = React.useState('');
   const [count, setCount] = React.useState(30);
   const [progress, setProgress] = React.useState<any>(null);
+  const [loading, setLoading] = React.useState<any>(false);
   const [error, setError] = React.useState<string | null>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +38,7 @@ export default function Home() {
     setCount(Number(value));
   };
   const handleButtonClick = async () => {
-    console.log("BASE", 'http://167.86.121.201:5000');
+    setLoading(true);
     setProgress(0);
     // console.log('Selected File:', selectedFile);
     // console.log('File Name:', selectedFile.name);
@@ -51,16 +53,19 @@ export default function Home() {
     if (!body?.file) {
       setError('Choissez le ficher.');
       setProgress(null);
+       setLoading(false);
       return;
     }
     else if (!body?.width) {
       setError('Saisissez Largeur.');
       setProgress(null);
+       setLoading(false);
       return;
     }
     else if (!body?.count) {
       setError('Saisissez FPS.');
       setProgress(null);
+       setLoading(false);
       return;
     }
     else {
@@ -71,29 +76,28 @@ export default function Home() {
     setFilename(options?.filename);
     // console.log("RESPOSNE", JSON.parse(response));
     const paramsUrl = `?filename=${ options?.filename}&fps=${body?.count}&ext=${body?.extension}&width=${body?.width}&save_path=${options?.save_path}`
-      const eventSource = new EventSource('http://167.86.121.201:5000'+'/main/progressVideo'+paramsUrl);
+      const eventSource = new EventSource('http://localhost:5000'+'/main/progressVideo'+paramsUrl);
 
       eventSource.addEventListener('message', (event) => {
         const data = JSON.parse(event.data);
         setProgress(data.progress);
-          console.log(data);
         // setLiveData(data.message);
       });
   
       eventSource.onerror = (error) => {
         console.error('EventSource failed:', error);
+        setLoading(false);
         eventSource.close();
       };
-  
-      return () => {
+    return () => {
+      setLoading(false);
         eventSource.close();
       };
   };
   const handleDownload = async () => {
     try {
-      const response = await fetch('http://167.86.121.201:5000'+`/main/downloadFile?filename=${filename}.zip`);
+      const response = await fetch('http://localhost:5000'+`/main/downloadFile?filename=${filename}.zip`);
       const blob = await response.blob();
-      console.log(blob);
       const url = window.URL.createObjectURL(new Blob([blob]));
       const a = document.createElement('a');
       a.href = url;
@@ -156,9 +160,10 @@ export default function Home() {
               style={{ background: 'white', width: '100%', marginBottom: '10px' }}
             />
             {error && <Alert severity="error">{error}</Alert>}
-            <Button variant="outlined" color="primary" onClick={handleButtonClick} className='mt-5'>
-            Télécharger
-            </Button>
+            {!loading && <Button variant="outlined" color="primary" onClick={handleButtonClick} className='mt-5'>
+              Télécharger
+            </Button>}
+            {loading && <div style={{ textAlign: 'center' }}><CircularProgress /></div>}
             </div>
           <div style={{ width: '50%', marginTop: '50px' , display: "flex", flexDirection: "column", alignContent:"space-around", justifyContent: "space-between"}}>
             <h3>{progress? progress != 100 ? "Chargement" : "Prêt":""}</h3>
