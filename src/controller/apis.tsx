@@ -10,7 +10,7 @@ export const uploadVideo = async (body: ApiBody) => {
     try {
         const formData = new FormData();
         formData.append('file', body?.file);
-        const apiUrl = `/main/upload_video?count=${body?.count}&ext=${body?.extension}&height=${body?.width}`;
+        const apiUrl = `/main/upload_video?count=${body?.count}&ext=${body?.extension}&width=${body?.width}`;
         console.log(apiUrl);
         const response = await axiosInstance.post(apiUrl, formData, {
           headers: {
