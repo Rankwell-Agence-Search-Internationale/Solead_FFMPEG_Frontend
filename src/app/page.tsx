@@ -96,6 +96,7 @@ export default function Home() {
   };
   const handleDownload = async () => {
     try {
+      setLoading(true);
       const response = await fetch('http://167.86.121.201:5000'+`/main/downloadFile?filename=${filename}.zip`);
       const blob = await response.blob();
       const url = window.URL.createObjectURL(new Blob([blob]));
@@ -105,8 +106,10 @@ export default function Home() {
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
+      setLoading(false);
     } catch (error) {
       console.log('Error downloading file:', error);
+      setLoading(false);
     }
   };
     return (
@@ -164,12 +167,12 @@ export default function Home() {
             {!loading && <Button variant="outlined" color="primary" onClick={handleButtonClick} className='mt-5'>
               Télécharger
             </Button>}
-            {loading && <div style={{ textAlign: 'center' }}><CircularProgress /></div>}
             </div>
           <div style={{ width: '50%', marginTop: '50px' , display: "flex", flexDirection: "column", alignContent:"space-around", justifyContent: "space-between"}}>
             <h3>{progress? progress != 100 ? "Chargement" : "Prêt":""}</h3>
             <LinearProgress variant="determinate" value={progress} />
-            { progress ==100 &&
+            {loading && <div className= "mt-10" style={{ textAlign: 'center' }}><CircularProgress /></div>}
+            { progress ==100 && !loading &&
               <Button
                 variant="outlined"
                 color="primary"
