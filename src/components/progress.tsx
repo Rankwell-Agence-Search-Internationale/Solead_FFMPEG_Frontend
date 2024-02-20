@@ -5,7 +5,7 @@ const ProgressComponent = () => {
   const [liveData, setLiveData] = useState('');
 
   useEffect(() => {
-    const eventSource = new EventSource('http://localhost:5000/main/upload_video?count=100&ext=jpg&height=45');
+    const eventSource = new EventSource('http://localhost:5000/main/upload_video?count=100&ext=jpg&width=45');
 
     eventSource.addEventListener('message', (event) => {
         const data = JSON.parse(event.data);
