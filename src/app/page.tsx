@@ -194,7 +194,7 @@ export default function Home() {
               <Button
                 variant="outlined"
                 color="primary"
-                className='mt-5'
+                className='mt-10'
                 startIcon={<CloudDownloadIcon />}
                 onClick={handleDownload}
               >
