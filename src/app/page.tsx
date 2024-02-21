@@ -120,7 +120,7 @@ export default function Home() {
       const url = window.URL.createObjectURL(new Blob([blob]));
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'example.zip';
+      a.download = `${filename}.zip`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
