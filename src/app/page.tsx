@@ -153,7 +153,8 @@ export default function Home() {
             required
             style={{ background: 'white', marginBottom: '10px', width: '100%' }}
           >
-            <MenuItem value={'jpg'}>JPG</MenuItem>
+              <MenuItem value={'jpg'}>JPG</MenuItem>
+              <MenuItem value={'webp'}>WEBP</MenuItem>
             <MenuItem value={'png'}>PNG</MenuItem>
             </Select>
             <p style={{ textAlign: 'left' }}>FPS</p>
